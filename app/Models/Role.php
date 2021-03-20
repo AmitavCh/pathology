@@ -1,0 +1,1 @@
+<?phpnamespace App\Models;use Illuminate\Database\Eloquent\Model;class Role extends Model{    protected $table = 'roles';    public static $rules = array(        'role_name' => 'required',    );    public static $messages = array(        'role_name.required' => 'Please Add Role Name',    );}

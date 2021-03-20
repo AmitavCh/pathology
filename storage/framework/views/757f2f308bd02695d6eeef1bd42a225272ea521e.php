@@ -1,0 +1,1 @@
+<?php echo $__env->yieldContent('admin-content'); ?><?php /**PATH C:\xampp\htdocs\pathology\resources\views/layouts/ajax.blade.php ENDPATH**/ ?>
