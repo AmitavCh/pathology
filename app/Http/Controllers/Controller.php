@@ -127,15 +127,53 @@ class Controller extends BaseController
         }
         return $responseArr;
     }
-    public static function getRoleListForMasterUser($role_id = 0) {
+    public static function getLabLists($table_name = '', $col_name = ''){
         $response               = '';
         $responseArr[0]['id']   = "";
         $responseArr[0]['name'] = "Select";
+        if(isset(Auth::user()->role_id) && Auth::user()->role_id == 2){
+        $responseObjArr         = DB::table($table_name)->select($col_name, 'id')->where('status','Y')->where('t_branch_details_id','=',0)->orderby('business_logistic_name','asc')->get();
+        }else{
+        $responseObjArr         = DB::table($table_name)->select($col_name, 'id')->where('status','Y')->where('t_branch_details_id','!=',0)->orderby('business_logistic_name','asc')->get();    
+        }
+        foreach ($responseObjArr as $resKey => $resVal) {
+            $responseArr[$resKey + 1]['id']   = $resVal->id;
+            $responseArr[$resKey + 1]['name'] = $resVal->$col_name;
+
+        }
+        return $responseArr;
+    }
+    public static function getRoleListForMasterAdmin($role_id = 0) {
+        $response               = '';
         if(Auth::user()->role_id == 1){
-            $responseObjArr         = DB::table('roles')->select('role_name', 'id')->where('id','1')->orWhere('id','2')->where('is_active','0')->orderby('id','asc')->get();
+            $responseObjArr         = DB::table('roles')->select('role_name', 'id')->where('id','=',2)->orWhere('id','=',1)->where('is_active','0')->orderby('id','asc')->get();
+        }else if(Auth::user()->role_id == 2){
+            $responseObjArr         = DB::table('roles')->select('role_name', 'id')->where('id','!=',1)->where('id','!=',3)->where('is_active','0')->orderby('id','asc')->get();
         }else{
             $responseObjArr         = DB::table('roles')->select('role_name', 'id')->where('id','2')->where('is_active','0')->orderby('id','asc')->get();
         }
+        foreach ($responseObjArr as $resKey => $resVal) {
+            $responseArr[$resKey + 1]['id']   = $resVal->id;
+            $responseArr[$resKey + 1]['name'] = $resVal->role_name;
+
+        }
+        return $responseArr;
+    }
+    public static function getRoleListForBranchAdmin($role_id = 0) {
+        $response               = '';
+        if(Auth::user()->role_id == 2){
+            $responseObjArr         = DB::table('roles')->select('role_name', 'id')->where('id','3')->where('is_active','0')->orderby('id','asc')->get();
+        }
+        foreach ($responseObjArr as $resKey => $resVal) {
+            $responseArr[$resKey + 1]['id']   = $resVal->id;
+            $responseArr[$resKey + 1]['name'] = $resVal->role_name;
+
+        }
+        return $responseArr;
+    }
+    public static function getRoleListForLabAdmin($role_id = 0) {
+        $response               = '';
+        $responseObjArr         = DB::table('roles')->select('role_name', 'id')->where('id','!=',1)->where('id','!=',2)->where('id','!=',3)->where('is_active','0')->orderby('id','asc')->get();
         foreach ($responseObjArr as $resKey => $resVal) {
             $responseArr[$resKey + 1]['id']   = $resVal->id;
             $responseArr[$resKey + 1]['name'] = $resVal->role_name;
@@ -224,6 +262,48 @@ class Controller extends BaseController
         }
         return $response;
     }
+    public static function getOrganizationIdByBranchId($id) {
+        $response = '';
+        $userObj = DB::table('t_branch_details')
+                ->where('t_branch_details.id', '=', $id)
+                ->select(array(
+                    't_branch_details.t_organizations_id',
+                        )
+                )
+                ->first();
+        if (isset($userObj->t_organizations_id) && $userObj->t_organizations_id != '') {
+            $response = $userObj->t_organizations_id;
+        }
+        return $response;
+    }
+    public static function getOrganizationIdByLabId($id) {
+        $response = '';
+        $userObj = DB::table('t_business_logistic_dtls')
+                ->where('t_business_logistic_dtls.id', '=', $id)
+                ->select(array(
+                    't_business_logistic_dtls.t_organizations_id',
+                        )
+                )
+                ->first();
+        if (isset($userObj->t_organizations_id) && $userObj->t_organizations_id != '') {
+            $response = $userObj->t_organizations_id;
+        }
+        return $response;
+    }
+    public static function getBranchIdByLabId($id) {
+        $response = 0;
+        $userObj = DB::table('t_business_logistic_dtls')
+                ->where('t_business_logistic_dtls.id', '=', $id)
+                ->select(array(
+                    't_business_logistic_dtls.t_branch_details_id',
+                        )
+                )
+                ->first();
+        if (isset($userObj->t_branch_details_id) && $userObj->t_branch_details_id != '') {
+            $response = $userObj->t_branch_details_id;
+        }
+        return $response;
+    }
     public static function getCityNameById($id) {
         $response = '';
         $userObj = DB::table('t_cities')
@@ -280,5 +360,31 @@ class Controller extends BaseController
         }
         return $response;
     }
-    
+    public static function getPackagesList(){
+	$packageArr                 =   array();
+        $dbResArr		    =   DB::table('t_features')
+                                        ->orderBy('t_features.id','asc')
+                                        ->where('t_features.status','=','Y')
+                                        ->pluck('feature_name','id');
+
+            if(count($dbResArr) > 0){
+                    $packageArr	=	$dbResArr;
+            }
+            return $packageArr;
+    }
+    public static function getOrgTakenPackagesList(){
+	$packageArr                 =   array();
+        $dbResArr		    =   DB::table('t_features_details')
+                                        ->join('t_features','t_features_details.t_features_id','=','t_features.id')
+                                        ->select(array('t_features.id','t_features.feature_name','t_features_details.t_features_id','t_features_details.status'))
+                                        ->where('t_features_details.status','=','Y')
+                                        ->where('t_features_details.t_organizations_id','=',Auth::user()->t_organizations_id)
+                                        ->groupby('t_features_details.t_features_id')
+                                        ->pluck('feature_name','id');
+
+            if(count($dbResArr) > 0){
+                    $packageArr	=	$dbResArr;
+            }
+            return $packageArr;
+    }
 }

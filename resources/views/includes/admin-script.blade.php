@@ -96,6 +96,22 @@ var listingUrl				=	'';
             window.location.replace(baseUrl+"/setting/add_organization_details");
         @elseif($action == 'addState')
             window.location.replace(baseUrl+"/setting/add_state");
+        @elseif($action == 'addFeatures')
+            window.location.replace(baseUrl+"/setting/add_features");
+        @elseif($action == 'addOrganizationData')
+            window.location.replace(baseUrl+"/master/add_organization_data");
+        @elseif($action == 'addLabCollectionCenterData')
+            window.location.replace(baseUrl+"/branch/add_lab_collection_center_data");
+        @elseif($action == 'addRegionalBranchData')
+            window.location.replace(baseUrl+"/branch/add_regional_branch_data");
+        @elseif($action == 'addLabCollectionCenterUserData')
+            window.location.replace(baseUrl+"/branch/add_lab_collection_center_user_data"); 
+        @elseif($action == 'addLabCollectionCenterData')
+            window.location.replace(baseUrl+"/branch/add_lab_collection_center_data"); 
+        @elseif($action == 'createBranchUserData')
+            window.location.replace(baseUrl+"/branch/create_branch_user_data"); 
+        @elseif($action == 'createOrganizationUserData')
+            window.location.replace(baseUrl+"/branch/create_organization_user_data"); 
         @endif
     }
     function checkConfirmation(){
@@ -585,7 +601,7 @@ var listingUrl				=	'';
         }
     @endif
     @if($action == 'addFeatures')
-        function getMenuSubmenuList(role_id){
+        function getMenuSubmenuList(){
             $('#loddingImage').show();
             $.ajaxSetup({
                 headers: {
@@ -607,6 +623,47 @@ var listingUrl				=	'';
                 }
             });
         }
+        function saveFeaturesData(){
+            $('#sucMsgDiv').hide('slow');
+            $('#failMsgDiv').hide('slow');                  
+            $('#failMsgDiv').addClass('text-none');
+            $('#sucMsgDiv').addClass('text-none');
+            // $('.frmbtngroup').prop('disabled',true);            
+            $('#loddingImage').show();
+            $.ajaxSetup({
+                headers: {
+                        'X-CSRF-Token': csrfTkn
+                }
+            });
+            $.ajax({
+                url:baseUrl+'/master/saveFeaturesData',
+                type: 'post',
+                cache: false,                   
+                data:{
+                    "formdata": $('#entryFrm').serialize(),
+                },
+                success: function(res){     
+                    $('.error-message').remove();
+                    $('#loddingImage').hide();
+                    var resp        =   res.split('****'); 
+                    if(resp[1] == 'ERROR'){                                         
+                        $('#failMsgDiv').removeClass('text-none');
+                        $('.failmsgdiv').html(resp[2]);
+                        $('#failMsgDiv').show('slow');
+                    }else if(resp[1] == 'FAILURE'){
+                        showJsonErrors(resp[2]);
+                    }else if(resp[1] == 'SUCCESS'){
+                        $('#sucMsgDiv').removeClass('text-none');
+                        $('.sucmsgdiv').html(resp[2]);
+                        $('#sucMsgDiv').show('slow');   
+                        window.location.replace(baseUrl+"/master/add_features");
+                    }      
+                },
+                error: function(xhr, textStatus, thrownError) {
+                    //alert('Something went to wrong.Please Try again later...');
+                }
+            });
+        }
     @endif
     @if($action == 'changepassword')
         function saveUpdatePwd(){
@@ -622,7 +679,7 @@ var listingUrl				=	'';
                 }
             });
             $.ajax({
-                url:baseUrl+'/user/updatePassword',
+                url:baseUrl+'/setting/updatePassword',
                 type: 'post',
                 cache: false,                   
                 data:{
@@ -643,7 +700,7 @@ var listingUrl				=	'';
                         $('.sucmsgdiv').html(resp[2]);
                         $('#sucMsgDiv').show('slow');   
                         setTimeout(function(){ $('#sucMsgDiv').fadeOut('slow'); }, 8000);
-                        window.location.replace(baseUrl+"/user/changepassword"); 
+                        window.location.replace(baseUrl+"/setting/changepassword"); 
                     }      
                 },
                 error: function(xhr, textStatus, thrownError) {
@@ -653,48 +710,6 @@ var listingUrl				=	'';
         }
     @endif
     @if($action == 'addDepartment')
-        function saveDepartmentFrm(){
-            $('#sucMsgDiv').hide('slow');
-            $('#failMsgDiv').hide('slow');                  
-            $('#failMsgDiv').addClass('text-none');
-            $('#sucMsgDiv').addClass('text-none');
-            // $('.frmbtngroup').prop('disabled',true);            
-            $('#loddingImage').show();
-            $.ajaxSetup({
-                headers: {
-                        'X-CSRF-Token': csrfTkn
-                }
-            });
-            $.ajax({
-                url:baseUrl+'/setting/saveDepartment',
-                type: 'post',
-                cache: false,                   
-                data:{
-                    "formdata": $('#entryFrm').serialize(),
-                },
-                success: function(res){     
-                    $('.error-message').remove();
-                    $('#loddingImage').hide();
-                    var resp        =   res.split('****'); 
-                    if(resp[1] == 'ERROR'){                                         
-                        $('#failMsgDiv').removeClass('text-none');
-                        $('.failmsgdiv').html(resp[2]);
-                        $('#failMsgDiv').show('slow');
-                    }else if(resp[1] == 'FAILURE'){
-                        showJsonErrors(resp[2]);
-                    }else if(resp[1] == 'SUCCESS'){
-                        $('#sucMsgDiv').removeClass('text-none');
-                        $('.sucmsgdiv').html(resp[2]);
-                        $('#sucMsgDiv').show('slow');   
-                        setTimeout(function(){ $('#sucMsgDiv').fadeOut('slow'); }, 8000);
-                        window.location.replace(baseUrl+"/setting/add_department"); 
-                    }      
-                },
-                error: function(xhr, textStatus, thrownError) {
-                    //alert('Something went to wrong.Please Try again later...');
-                }
-            });
-        }
         function ActiveDepartment(record_id){
 			if(confirm('Are you sure to Active Record ?')){
             $('#sucMsgDiv').hide('slow');
@@ -826,8 +841,8 @@ var listingUrl				=	'';
             }
         }
     @endif
-    @if($action == 'addDesignation')
-        function saveDesignationFrm(){
+    @if($action == 'addDepartmentData')
+        function saveDepartmentFrm(){
             $('#sucMsgDiv').hide('slow');
             $('#failMsgDiv').hide('slow');                  
             $('#failMsgDiv').addClass('text-none');
@@ -840,7 +855,7 @@ var listingUrl				=	'';
                 }
             });
             $.ajax({
-                url:baseUrl+'/setting/saveDesignation',
+                url:baseUrl+'/setting/saveDepartment',
                 type: 'post',
                 cache: false,                   
                 data:{
@@ -860,8 +875,7 @@ var listingUrl				=	'';
                         $('#sucMsgDiv').removeClass('text-none');
                         $('.sucmsgdiv').html(resp[2]);
                         $('#sucMsgDiv').show('slow');   
-                        setTimeout(function(){ $('#sucMsgDiv').fadeOut('slow'); }, 8000);
-                        window.location.replace(baseUrl+"/setting/add_designation"); 
+                        setTimeout(function(){window.parent.location.reload(true);}, 1000);
                     }      
                 },
                 error: function(xhr, textStatus, thrownError) {
@@ -869,6 +883,8 @@ var listingUrl				=	'';
                 }
             });
         }
+    @endif
+    @if($action == 'addDesignation')
         function ActiveDesignation(record_id){
 			if(confirm('Are you sure to Active Record ?')){
             $('#sucMsgDiv').hide('slow');
@@ -1000,8 +1016,13 @@ var listingUrl				=	'';
             }
         }
     @endif
-    @if($action == 'addState')
-        function saveState(){
+    @if($action == 'addDesignationData')
+        function saveDesignationFrm(){
+            $('#sucMsgDiv').hide('slow');
+            $('#failMsgDiv').hide('slow');                  
+            $('#failMsgDiv').addClass('text-none');
+            $('#sucMsgDiv').addClass('text-none');
+            // $('.frmbtngroup').prop('disabled',true);            
             $('#loddingImage').show();
             $.ajaxSetup({
                 headers: {
@@ -1009,7 +1030,7 @@ var listingUrl				=	'';
                 }
             });
             $.ajax({
-                url:baseUrl+'/setting/saveState',
+                url:baseUrl+'/setting/saveDesignation',
                 type: 'post',
                 cache: false,                   
                 data:{
@@ -1029,8 +1050,7 @@ var listingUrl				=	'';
                         $('#sucMsgDiv').removeClass('text-none');
                         $('.sucmsgdiv').html(resp[2]);
                         $('#sucMsgDiv').show('slow');   
-                        setTimeout(function(){ $('#sucMsgDiv').fadeOut('slow'); }, 8000);
-                        window.location.replace(baseUrl+"/setting/add_state"); 
+                        setTimeout(function(){window.parent.location.reload(true);}, 1000);
                     }      
                 },
                 error: function(xhr, textStatus, thrownError) {
@@ -1038,6 +1058,8 @@ var listingUrl				=	'';
                 }
             });
         }
+    @endif
+    @if($action == 'addState')
         function stateActive(record_id){
 	if(confirm('Are you sure to Active Record ?')){
             $('#loddingImage').show();
@@ -1117,8 +1139,8 @@ var listingUrl				=	'';
         }
     }
     @endif
-    @if($action == 'addCity')
-        function saveCity(){
+    @if($action == 'addStateData')
+        function saveState(){
             $('#loddingImage').show();
             $.ajaxSetup({
                 headers: {
@@ -1126,7 +1148,7 @@ var listingUrl				=	'';
                 }
             });
             $.ajax({
-                url:baseUrl+'/setting/saveCity',
+                url:baseUrl+'/setting/saveState',
                 type: 'post',
                 cache: false,                   
                 data:{
@@ -1146,8 +1168,7 @@ var listingUrl				=	'';
                         $('#sucMsgDiv').removeClass('text-none');
                         $('.sucmsgdiv').html(resp[2]);
                         $('#sucMsgDiv').show('slow');   
-                        setTimeout(function(){ $('#sucMsgDiv').fadeOut('slow'); }, 8000);
-                        window.location.replace(baseUrl+"/setting/add_city"); 
+                        setTimeout(function(){window.parent.location.reload(true);}, 1000);
                     }      
                 },
                 error: function(xhr, textStatus, thrownError) {
@@ -1155,6 +1176,8 @@ var listingUrl				=	'';
                 }
             });
         }
+    @endif
+    @if($action == 'addCity')
         function cityActive(record_id){
 	if(confirm('Are you sure to Active Record ?')){
             $('#loddingImage').show();
@@ -1234,13 +1257,909 @@ var listingUrl				=	'';
         }
         }
     @endif
-    function showData1(){
+    @if($action == 'addCityData')
+        function saveCity(){
+            $('#loddingImage').show();
+            $.ajaxSetup({
+                headers: {
+                        'X-CSRF-Token': csrfTkn
+                }
+            });
+            $.ajax({
+                url:baseUrl+'/setting/saveCity',
+                type: 'post',
+                cache: false,                   
+                data:{
+                    "formdata": $('#entryFrm').serialize(),
+                },
+                success: function(res){     
+                    $('.error-message').remove();
+                    $('#loddingImage').hide();
+                    var resp        =   res.split('****'); 
+                    if(resp[1] == 'ERROR'){                                         
+                        $('#failMsgDiv').removeClass('text-none');
+                        $('.failmsgdiv').html(resp[2]);
+                        $('#failMsgDiv').show('slow');
+                    }else if(resp[1] == 'FAILURE'){
+                        showJsonErrors(resp[2]);
+                    }else if(resp[1] == 'SUCCESS'){
+                        $('#sucMsgDiv').removeClass('text-none');
+                        $('.sucmsgdiv').html(resp[2]);
+                        $('#sucMsgDiv').show('slow');   
+                        setTimeout(function(){window.parent.location.reload(true);}, 1000);
+                    }      
+                },
+                error: function(xhr, textStatus, thrownError) {
+                    //alert('Something went to wrong.Please Try again later...');
+                }
+            });
+        }
+    @endif
+    @if($action == 'addMasterUser')
+        function ActiveUser(record_id){
+            if (confirm('Are you sure to Active Record ?')){
+                $('#loddingImage').show();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-Token': csrfTkn
+                    }
+                });
+                $.ajax({
+                    url:baseUrl + '/master/masterUserDetailsActive',
+                    type: 'post',
+                    cache: false,
+                    data:{
+                        "record_id": record_id,
+                    },
+                    success: function(res){
+                    $('.error-message').remove();
+                    $('#loddingImage').hide();
+                    var resp = res.split('****');
+                    if (resp[1] == 'ERROR'){
+                    $('#failMsgDiv').removeClass('text-none');
+                    $('.failmsgdiv').html(resp[2]);
+                    $('#failMsgDiv').show('slow');
+                    } else if (resp[1] == 'FAILURE'){
+                    showJsonErrors(resp[2]);
+                    } else if (resp[1] == 'SUCCESS'){
+                    $('#sucMsgDiv').removeClass('text-none');
+                    $('.sucmsgdiv').html(resp[2]);
+                    $('#sucMsgDiv').show('slow');
+                    setTimeout(function(){ $('#sucMsgDiv').fadeOut('slow'); }, 5000);
+                    window.location.replace(baseUrl + "/master/add_master_user");
+                    }
+                    },
+                    error: function(xhr, textStatus, thrownError) {
+                    //alert('Something went to wrong.Please Try again later...');
+                    }
+                });
+            }
+        }
+        function DeActiveUser(record_id){
+            if (confirm('Are you sure to In-active Record ?')){
+                $('#sucMsgDiv').hide('slow');
+                $('#failMsgDiv').hide('slow');
+                $('#failMsgDiv').addClass('text-none');
+                $('#sucMsgDiv').addClass('text-none');
+                $('#loddingImage').show();
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-Token': csrfTkn
+                }
+                });
+                $.ajax({
+                url:baseUrl + '/master/masterUserDetailsDeactive',
+                        type: 'post',
+                        cache: false,
+                        data:{
+                        "record_id": record_id,
+                        },
+                        success: function(res){
+                        $('.error-message').remove();
+                        $('#loddingImage').hide();
+                        var resp = res.split('****');
+                        if (resp[1] == 'ERROR'){
+                        $('#failMsgDiv').removeClass('text-none');
+                        $('.failmsgdiv').html(resp[2]);
+                        $('#failMsgDiv').show('slow');
+                        } else if (resp[1] == 'FAILURE'){
+                        showJsonErrors(resp[2]);
+                        } else if (resp[1] == 'SUCCESS'){
+                        $('#sucMsgDiv').removeClass('text-none');
+                        $('.sucmsgdiv').html(resp[2]);
+                        $('#sucMsgDiv').show('slow');
+                        setTimeout(function(){ $('#sucMsgDiv').fadeOut('slow'); }, 5000);
+                        window.location.replace(baseUrl + "/master/add_master_user");
+                        }
+                        },
+                        error: function(xhr, textStatus, thrownError) {
+                        //alert('Something went to wrong.Please Try again later...');
+                        }
+                });
+            }
+        }
+    @endif
+    @if($action == 'createOrganizationUser')
+        function ActiveUser(record_id){
+            if (confirm('Are you sure to Active Record ?')){
+                $('#loddingImage').show();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-Token': csrfTkn
+                    }
+                });
+                $.ajax({
+                    url:baseUrl + '/master/masterUserDetailsActive',
+                    type: 'post',
+                    cache: false,
+                    data:{
+                        "record_id": record_id,
+                    },
+                    success: function(res){
+                    $('.error-message').remove();
+                    $('#loddingImage').hide();
+                    var resp = res.split('****');
+                    if (resp[1] == 'ERROR'){
+                    $('#failMsgDiv').removeClass('text-none');
+                    $('.failmsgdiv').html(resp[2]);
+                    $('#failMsgDiv').show('slow');
+                    } else if (resp[1] == 'FAILURE'){
+                    showJsonErrors(resp[2]);
+                    } else if (resp[1] == 'SUCCESS'){
+                    $('#sucMsgDiv').removeClass('text-none');
+                    $('.sucmsgdiv').html(resp[2]);
+                    $('#sucMsgDiv').show('slow');
+                    setTimeout(function(){ $('#sucMsgDiv').fadeOut('slow'); }, 5000);
+                    window.location.replace(baseUrl + "/master/add_master_user");
+                    }
+                    },
+                    error: function(xhr, textStatus, thrownError) {
+                    //alert('Something went to wrong.Please Try again later...');
+                    }
+                });
+            }
+        }
+        function DeActiveUser(record_id){
+            if (confirm('Are you sure to In-active Record ?')){
+                $('#sucMsgDiv').hide('slow');
+                $('#failMsgDiv').hide('slow');
+                $('#failMsgDiv').addClass('text-none');
+                $('#sucMsgDiv').addClass('text-none');
+                $('#loddingImage').show();
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-Token': csrfTkn
+                }
+                });
+                $.ajax({
+                url:baseUrl + '/master/masterUserDetailsDeactive',
+                        type: 'post',
+                        cache: false,
+                        data:{
+                        "record_id": record_id,
+                        },
+                        success: function(res){
+                        $('.error-message').remove();
+                        $('#loddingImage').hide();
+                        var resp = res.split('****');
+                        if (resp[1] == 'ERROR'){
+                        $('#failMsgDiv').removeClass('text-none');
+                        $('.failmsgdiv').html(resp[2]);
+                        $('#failMsgDiv').show('slow');
+                        } else if (resp[1] == 'FAILURE'){
+                        showJsonErrors(resp[2]);
+                        } else if (resp[1] == 'SUCCESS'){
+                        $('#sucMsgDiv').removeClass('text-none');
+                        $('.sucmsgdiv').html(resp[2]);
+                        $('#sucMsgDiv').show('slow');
+                        setTimeout(function(){ $('#sucMsgDiv').fadeOut('slow'); }, 5000);
+                        window.location.replace(baseUrl + "/master/add_master_user");
+                        }
+                        },
+                        error: function(xhr, textStatus, thrownError) {
+                        //alert('Something went to wrong.Please Try again later...');
+                        }
+                });
+            }
+        }
+    @endif
+    @if($action == 'addMasterUserData')
+        function userValidate(){
+            $('.registerBtn').prop('disabled',true);
+            $('.imgLoader').show();
+            $('.error-message').remove();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': csrfTkn
+                }
+            });
+            $.ajax({
+                url:baseUrl+'/master/validateMasterUserDetails',
+                type: 'post',
+                cache: false,
+                data:{
+                    "formData": $('#entryFrm').serialize(),
+                },
+                success: function(res){
+                    $('.imgLoader').hide();
+                    var resp	=   res.split('****');
+                    if(resp[1] == 'ERROR'){
+                        $('.registerBtn').prop('disabled',false);
+                    }else{
+                        if(resp[1] == 'FAILURE'){
+                            $('.btn btn-success').prop('disabled',false);
+                           showJsonErrors(resp[2]);
+                        }else if(resp[1] == 'SUCCESS'){
+                            document.forms['entryFrm'].submit();
+                        }
+                    }
+                },
+                error: function(xhr, textStatus, thrownError) {
+                    alert('Something went to wrong.Please Try again later...');
+                }
+            });
+        }
+        function userValidates(){
+            $('.registerBtn').prop('disabled',true);
+            $('.imgLoader').show();
+            $('.error-message').remove();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': csrfTkn
+                }
+            });
+            $.ajax({
+                url:baseUrl+'/master/validateMasterUserDetailss',
+                type: 'post',
+                cache: false,
+                data:{
+                    "formData": $('#entryFrm').serialize(),
+                },
+                success: function(res){
+                    $('.imgLoader').hide();
+                    var resp	=   res.split('****');
+                    if(resp[1] == 'ERROR'){
+                        $('.registerBtn').prop('disabled',false);
+                    }else{
+                        if(resp[1] == 'FAILURE'){
+                            $('.btn btn-success').prop('disabled',false);
+                           showJsonErrors(resp[2]);
+                        }else if(resp[1] == 'SUCCESS'){
+                            document.forms['entryFrm'].submit();
+                        }
+                    }
+                },
+                error: function(xhr, textStatus, thrownError) {
+                    alert('Something went to wrong.Please Try again later...');
+                }
+            });
+        }
+    @endif
+    @if($action == 'createOrganizationUserData')
+        function userValidate(){
+            $('.registerBtn').prop('disabled',true);
+            $('.imgLoader').show();
+            $('.error-message').remove();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': csrfTkn
+                }
+            });
+            $.ajax({
+                url:baseUrl+'/master/validateMasterUserDetails',
+                type: 'post',
+                cache: false,
+                data:{
+                    "formData": $('#entryFrm').serialize(),
+                },
+                success: function(res){
+                    $('.imgLoader').hide();
+                    var resp	=   res.split('****');
+                    if(resp[1] == 'ERROR'){
+                        $('.registerBtn').prop('disabled',false);
+                    }else{
+                        if(resp[1] == 'FAILURE'){
+                            $('.btn btn-success').prop('disabled',false);
+                           showJsonErrors(resp[2]);
+                        }else if(resp[1] == 'SUCCESS'){
+                            document.forms['entryFrm'].submit();
+                        }
+                    }
+                },
+                error: function(xhr, textStatus, thrownError) {
+                    alert('Something went to wrong.Please Try again later...');
+                }
+            });
+        }
+        function userValidates(){
+            $('.registerBtn').prop('disabled',true);
+            $('.imgLoader').show();
+            $('.error-message').remove();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': csrfTkn
+                }
+            });
+            $.ajax({
+                url:baseUrl+'/master/validateMasterUserDetailss',
+                type: 'post',
+                cache: false,
+                data:{
+                    "formData": $('#entryFrm').serialize(),
+                },
+                success: function(res){
+                    $('.imgLoader').hide();
+                    var resp	=   res.split('****');
+                    if(resp[1] == 'ERROR'){
+                        $('.registerBtn').prop('disabled',false);
+                    }else{
+                        if(resp[1] == 'FAILURE'){
+                            $('.btn btn-success').prop('disabled',false);
+                           showJsonErrors(resp[2]);
+                        }else if(resp[1] == 'SUCCESS'){
+                            document.forms['entryFrm'].submit();
+                        }
+                    }
+                },
+                error: function(xhr, textStatus, thrownError) {
+                    alert('Something went to wrong.Please Try again later...');
+                }
+            });
+        }
+    @endif
+    @if($action == 'addRegionalBranch')
+        function regionalBranchActive(record_id){
+            if(confirm('Are you sure to Active Record ?')){
+                $('#loddingImage').show();
+                $.ajaxSetup({
+                    headers: {
+                            'X-CSRF-Token': csrfTkn
+                    }
+                });
+                $.ajax({
+                    url:baseUrl+'/branch/regionalBranchActive',
+                    type: 'post',
+                    cache: false,                   
+                    data:{
+                        "record_id": record_id,
+                    },
+                    success: function(res){     
+                        $('.error-message').remove();
+                        $('#loddingImage').hide();
+                        var resp        =   res.split('****'); 
+                        if(resp[1] == 'ERROR'){                                         
+                            $('#failMsgDiv').removeClass('text-none');
+                            $('.failmsgdiv').html(resp[2]);
+                            $('#failMsgDiv').show('slow');
+                        }else if(resp[1] == 'FAILURE'){
+                            showJsonErrors(resp[2]);
+                        }else if(resp[1] == 'SUCCESS'){
+                            $('#sucMsgDiv').removeClass('text-none');
+                            $('.sucmsgdiv').html(resp[2]);
+                            $('#sucMsgDiv').show('slow');   
+                            setTimeout(function(){ $('#sucMsgDiv').fadeOut('slow'); }, 5000);
+                            window.location.replace(baseUrl+"/branch/add_regional_branch"); 
+                        }      
+                    },
+                    error: function(xhr, textStatus, thrownError) {
+                        //alert('Something went to wrong.Please Try again later...');
+                    }
+                });
+            }
+        }
+        function regionalBranchDeactive(record_id){
+            if(confirm('Are you sure to In-active Record ?')){
+                $('#loddingImage').show();
+                $.ajaxSetup({
+                    headers: {
+                            'X-CSRF-Token': csrfTkn
+                    }
+                });
+                $.ajax({
+                    url:baseUrl+'/branch/regionalBranchDeactive',
+                    type: 'post',
+                    cache: false,                   
+                    data:{
+                        "record_id": record_id,
+                    },
+                    success: function(res){     
+                        $('.error-message').remove();
+                        $('#loddingImage').hide();
+                        var resp        =   res.split('****'); 
+                        if(resp[1] == 'ERROR'){                                         
+                            $('#failMsgDiv').removeClass('text-none');
+                            $('.failmsgdiv').html(resp[2]);
+                            $('#failMsgDiv').show('slow');
+                        }else if(resp[1] == 'FAILURE'){
+                            showJsonErrors(resp[2]);
+                        }else if(resp[1] == 'SUCCESS'){
+                            $('#sucMsgDiv').removeClass('text-none');
+                            $('.sucmsgdiv').html(resp[2]);
+                            $('#sucMsgDiv').show('slow');   
+                            setTimeout(function(){ $('#sucMsgDiv').fadeOut('slow'); }, 5000);
+                            window.location.replace(baseUrl+"/branch/add_regional_branch"); 
+                        }      
+                    },
+                    error: function(xhr, textStatus, thrownError) {
+                        //alert('Something went to wrong.Please Try again later...');
+                    }
+                });
+            }
+        }
+    @endif
+    @if($action == 'addRegionalBranchData')
+        function dataValidate(){
+            $('.registerBtn').prop('disabled',true);
+            $('.imgLoader').show();
+            $('.error-message').remove();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': csrfTkn
+                }
+            });
+            $.ajax({
+                url:baseUrl+'/branch/validateRegionalBranch',
+                type: 'post',
+                cache: false,
+                data:{
+                    "formData": $('#entryFrm').serialize(),
+                },
+                success: function(res){
+                    $('.imgLoader').hide();
+                    var resp	=   res.split('****');
+                    if(resp[1] == 'ERROR'){
+                        $('.registerBtn').prop('disabled',false);
+                    }else{
+                        if(resp[1] == 'FAILURE'){
+                            $('.btn btn-success').prop('disabled',false);
+                           showJsonErrors(resp[2]);
+                        }else if(resp[1] == 'SUCCESS'){
+                            document.forms['entryFrm'].submit();
+                        }
+                    }
+                },
+                error: function(xhr, textStatus, thrownError) {
+                    alert('Something went to wrong.Please Try again later...');
+                }
+            });
+        }
+    @endif
+    @if($action == 'createBranchUser')
+        function ActiveUser(record_id){
+            if (confirm('Are you sure to Active Record ?')){
+                $('#loddingImage').show();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-Token': csrfTkn
+                    }
+                });
+                $.ajax({
+                    url:baseUrl + '/branch/branchUserDetailsActive',
+                    type: 'post',
+                    cache: false,
+                    data:{
+                        "record_id": record_id,
+                    },
+                    success: function(res){
+                    $('.error-message').remove();
+                    $('#loddingImage').hide();
+                    var resp = res.split('****');
+                    if (resp[1] == 'ERROR'){
+                    $('#failMsgDiv').removeClass('text-none');
+                    $('.failmsgdiv').html(resp[2]);
+                    $('#failMsgDiv').show('slow');
+                    } else if (resp[1] == 'FAILURE'){
+                    showJsonErrors(resp[2]);
+                    } else if (resp[1] == 'SUCCESS'){
+                    $('#sucMsgDiv').removeClass('text-none');
+                    $('.sucmsgdiv').html(resp[2]);
+                    $('#sucMsgDiv').show('slow');
+                    setTimeout(function(){ $('#sucMsgDiv').fadeOut('slow'); }, 5000);
+                    window.location.replace(baseUrl + "/branch/create_branch_user");
+                    }
+                    },
+                    error: function(xhr, textStatus, thrownError) {
+                    //alert('Something went to wrong.Please Try again later...');
+                    }
+                });
+            }
+        }
+        function DeActiveUser(record_id){
+            if (confirm('Are you sure to In-active Record ?')){
+                $('#sucMsgDiv').hide('slow');
+                $('#failMsgDiv').hide('slow');
+                $('#failMsgDiv').addClass('text-none');
+                $('#sucMsgDiv').addClass('text-none');
+                $('#loddingImage').show();
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-Token': csrfTkn
+                }
+                });
+                $.ajax({
+                url:baseUrl + '/branch/branchUserDetailsDeactive',
+                        type: 'post',
+                        cache: false,
+                        data:{
+                        "record_id": record_id,
+                        },
+                        success: function(res){
+                        $('.error-message').remove();
+                        $('#loddingImage').hide();
+                        var resp = res.split('****');
+                        if (resp[1] == 'ERROR'){
+                        $('#failMsgDiv').removeClass('text-none');
+                        $('.failmsgdiv').html(resp[2]);
+                        $('#failMsgDiv').show('slow');
+                        } else if (resp[1] == 'FAILURE'){
+                        showJsonErrors(resp[2]);
+                        } else if (resp[1] == 'SUCCESS'){
+                        $('#sucMsgDiv').removeClass('text-none');
+                        $('.sucmsgdiv').html(resp[2]);
+                        $('#sucMsgDiv').show('slow');
+                        setTimeout(function(){ $('#sucMsgDiv').fadeOut('slow'); }, 5000);
+                        window.location.replace(baseUrl + "/branch/create_branch_user");
+                        }
+                        },
+                        error: function(xhr, textStatus, thrownError) {
+                        //alert('Something went to wrong.Please Try again later...');
+                        }
+                });
+            }
+        }
+    @endif
+    @if($action == 'createBranchUserData')
+        function userValidate(){
+            $('.registerBtn').prop('disabled',true);
+            $('.imgLoader').show();
+            $('.error-message').remove();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': csrfTkn
+                }
+            });
+            $.ajax({
+                url:baseUrl+'/branch/validateBranchUserDetails',
+                type: 'post',
+                cache: false,
+                data:{
+                    "formData": $('#entryFrm').serialize(),
+                },
+                success: function(res){
+                    $('.imgLoader').hide();
+                    var resp	=   res.split('****');
+                    if(resp[1] == 'ERROR'){
+                        $('.registerBtn').prop('disabled',false);
+                    }else{
+                        if(resp[1] == 'FAILURE'){
+                            $('.btn btn-success').prop('disabled',false);
+                           showJsonErrors(resp[2]);
+                        }else if(resp[1] == 'SUCCESS'){
+                            document.forms['entryFrm'].submit();
+                        }
+                    }
+                },
+                error: function(xhr, textStatus, thrownError) {
+                    alert('Something went to wrong.Please Try again later...');
+                }
+            });
+        }
+        function userValidates(){
+            $('.registerBtn').prop('disabled',true);
+            $('.imgLoader').show();
+            $('.error-message').remove();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': csrfTkn
+                }
+            });
+            $.ajax({
+                url:baseUrl+'/branch/validateBranchUserDetailss',
+                type: 'post',
+                cache: false,
+                data:{
+                    "formData": $('#entryFrm').serialize(),
+                },
+                success: function(res){
+                    $('.imgLoader').hide();
+                    var resp	=   res.split('****');
+                    if(resp[1] == 'ERROR'){
+                        $('.registerBtn').prop('disabled',false);
+                    }else{
+                        if(resp[1] == 'FAILURE'){
+                            $('.btn btn-success').prop('disabled',false);
+                           showJsonErrors(resp[2]);
+                        }else if(resp[1] == 'SUCCESS'){
+                            document.forms['entryFrm'].submit();
+                        }
+                    }
+                },
+                error: function(xhr, textStatus, thrownError) {
+                    alert('Something went to wrong.Please Try again later...');
+                }
+            });
+        }
+    @endif
+    @if($action == 'addLabCollectionCenterUserData')
+        function userValidate(){
+            $('.registerBtn').prop('disabled',true);
+            $('.imgLoader').show();
+            $('.error-message').remove();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': csrfTkn
+                }
+            });
+            $.ajax({
+                url:baseUrl+'/branch/validateLabCollectionCenterUserDetails',
+                type: 'post',
+                cache: false,
+                data:{
+                    "formData": $('#entryFrm').serialize(),
+                },
+                success: function(res){
+                    $('.imgLoader').hide();
+                    var resp	=   res.split('****');
+                    if(resp[1] == 'ERROR'){
+                        $('.registerBtn').prop('disabled',false);
+                    }else{
+                        if(resp[1] == 'FAILURE'){
+                            $('.btn btn-success').prop('disabled',false);
+                           showJsonErrors(resp[2]);
+                        }else if(resp[1] == 'SUCCESS'){
+                            document.forms['entryFrm'].submit();
+                        }
+                    }
+                },
+                error: function(xhr, textStatus, thrownError) {
+                    alert('Something went to wrong.Please Try again later...');
+                }
+            });
+        }
+        function userValidates(){
+            $('.registerBtn').prop('disabled',true);
+            $('.imgLoader').show();
+            $('.error-message').remove();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': csrfTkn
+                }
+            });
+            $.ajax({
+                url:baseUrl+'/branch/validateLabCollectionCenterUserDetailss',
+                type: 'post',
+                cache: false,
+                data:{
+                    "formData": $('#entryFrm').serialize(),
+                },
+                success: function(res){
+                    $('.imgLoader').hide();
+                    var resp	=   res.split('****');
+                    if(resp[1] == 'ERROR'){
+                        $('.registerBtn').prop('disabled',false);
+                    }else{
+                        if(resp[1] == 'FAILURE'){
+                            $('.btn btn-success').prop('disabled',false);
+                           showJsonErrors(resp[2]);
+                        }else if(resp[1] == 'SUCCESS'){
+                            document.forms['entryFrm'].submit();
+                        }
+                    }
+                },
+                error: function(xhr, textStatus, thrownError) {
+                    alert('Something went to wrong.Please Try again later...');
+                }
+            });
+        }
+    @endif
+    @if($action == 'addLabCollectionCenterUser')
+        function ActiveUser(record_id){
+            if (confirm('Are you sure to Active Record ?')){
+                $('#loddingImage').show();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-Token': csrfTkn
+                    }
+                });
+                $.ajax({
+                    url:baseUrl + '/branch/labCollectionCenterUserDetailsActive',
+                    type: 'post',
+                    cache: false,
+                    data:{
+                        "record_id": record_id,
+                    },
+                    success: function(res){
+                    $('.error-message').remove();
+                    $('#loddingImage').hide();
+                    var resp = res.split('****');
+                    if (resp[1] == 'ERROR'){
+                    $('#failMsgDiv').removeClass('text-none');
+                    $('.failmsgdiv').html(resp[2]);
+                    $('#failMsgDiv').show('slow');
+                    } else if (resp[1] == 'FAILURE'){
+                    showJsonErrors(resp[2]);
+                    } else if (resp[1] == 'SUCCESS'){
+                    $('#sucMsgDiv').removeClass('text-none');
+                    $('.sucmsgdiv').html(resp[2]);
+                    $('#sucMsgDiv').show('slow');
+                    setTimeout(function(){ $('#sucMsgDiv').fadeOut('slow'); }, 5000);
+                    window.location.replace(baseUrl + "/branch/add_lab_collection_center_user");
+                    }
+                    },
+                    error: function(xhr, textStatus, thrownError) {
+                    //alert('Something went to wrong.Please Try again later...');
+                    }
+                });
+            }
+        }
+        function DeActiveUser(record_id){
+            if (confirm('Are you sure to In-active Record ?')){
+                $('#sucMsgDiv').hide('slow');
+                $('#failMsgDiv').hide('slow');
+                $('#failMsgDiv').addClass('text-none');
+                $('#sucMsgDiv').addClass('text-none');
+                $('#loddingImage').show();
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-Token': csrfTkn
+                }
+                });
+                $.ajax({
+                url:baseUrl + '/branch/labCollectionCenterUserDetailsDeactive',
+                        type: 'post',
+                        cache: false,
+                        data:{
+                        "record_id": record_id,
+                        },
+                        success: function(res){
+                        $('.error-message').remove();
+                        $('#loddingImage').hide();
+                        var resp = res.split('****');
+                        if (resp[1] == 'ERROR'){
+                        $('#failMsgDiv').removeClass('text-none');
+                        $('.failmsgdiv').html(resp[2]);
+                        $('#failMsgDiv').show('slow');
+                        } else if (resp[1] == 'FAILURE'){
+                        showJsonErrors(resp[2]);
+                        } else if (resp[1] == 'SUCCESS'){
+                        $('#sucMsgDiv').removeClass('text-none');
+                        $('.sucmsgdiv').html(resp[2]);
+                        $('#sucMsgDiv').show('slow');
+                        setTimeout(function(){ $('#sucMsgDiv').fadeOut('slow'); }, 5000);
+                        window.location.replace(baseUrl + "/branch/add_lab_collection_center_user");
+                        }
+                        },
+                        error: function(xhr, textStatus, thrownError) {
+                        //alert('Something went to wrong.Please Try again later...');
+                        }
+                });
+            }
+        }
+    @endif
+    @if($action == 'addLabCollectionCenter')
+        function labCollectionCenterActive(record_id){
+            if (confirm('Are you sure to Active Record ?')){
+                $('#loddingImage').show();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-Token': csrfTkn
+                    }
+                });
+                $.ajax({
+                    url:baseUrl + '/branch/labCollectionCenterActive',
+                    type: 'post',
+                    cache: false,
+                    data:{
+                        "record_id": record_id,
+                    },
+                    success: function(res){
+                    $('.error-message').remove();
+                    $('#loddingImage').hide();
+                    var resp = res.split('****');
+                    if (resp[1] == 'ERROR'){
+                    $('#failMsgDiv').removeClass('text-none');
+                    $('.failmsgdiv').html(resp[2]);
+                    $('#failMsgDiv').show('slow');
+                    } else if (resp[1] == 'FAILURE'){
+                    showJsonErrors(resp[2]);
+                    } else if (resp[1] == 'SUCCESS'){
+                    $('#sucMsgDiv').removeClass('text-none');
+                    $('.sucmsgdiv').html(resp[2]);
+                    $('#sucMsgDiv').show('slow');
+                    setTimeout(function(){ $('#sucMsgDiv').fadeOut('slow'); }, 5000);
+                    window.location.replace(baseUrl + "/branch/add_lab_collection_center");
+                    }
+                    },
+                    error: function(xhr, textStatus, thrownError) {
+                    //alert('Something went to wrong.Please Try again later...');
+                    }
+                });
+            }
+        }
+        function labCollectionCenterDeactive(record_id){
+            if (confirm('Are you sure to In-active Record ?')){
+                $('#sucMsgDiv').hide('slow');
+                $('#failMsgDiv').hide('slow');
+                $('#failMsgDiv').addClass('text-none');
+                $('#sucMsgDiv').addClass('text-none');
+                $('#loddingImage').show();
+                $.ajaxSetup({
+                headers: {
+                'X-CSRF-Token': csrfTkn
+                }
+                });
+                $.ajax({
+                url:baseUrl + '/branch/labCollectionCenterDeactive',
+                        type: 'post',
+                        cache: false,
+                        data:{
+                        "record_id": record_id,
+                        },
+                        success: function(res){
+                        $('.error-message').remove();
+                        $('#loddingImage').hide();
+                        var resp = res.split('****');
+                        if (resp[1] == 'ERROR'){
+                        $('#failMsgDiv').removeClass('text-none');
+                        $('.failmsgdiv').html(resp[2]);
+                        $('#failMsgDiv').show('slow');
+                        } else if (resp[1] == 'FAILURE'){
+                        showJsonErrors(resp[2]);
+                        } else if (resp[1] == 'SUCCESS'){
+                        $('#sucMsgDiv').removeClass('text-none');
+                        $('.sucmsgdiv').html(resp[2]);
+                        $('#sucMsgDiv').show('slow');
+                        setTimeout(function(){ $('#sucMsgDiv').fadeOut('slow'); }, 5000);
+                        window.location.replace(baseUrl + "/branch/add_lab_collection_center");
+                        }
+                        },
+                        error: function(xhr, textStatus, thrownError) {
+                        //alert('Something went to wrong.Please Try again later...');
+                        }
+                });
+            }
+        }
+    @endif
+    @if($action == 'addLabCollectionCenterData')
+        function dataValidate(){
+            $('.registerBtn').prop('disabled',true);
+            $('.imgLoader').show();
+            $('.error-message').remove();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': csrfTkn
+                }
+            });
+            $.ajax({
+                url:baseUrl+'/branch/validateLabCollectionCenter',
+                type: 'post',
+                cache: false,
+                data:{
+                    "formData": $('#entryFrm').serialize(),
+                },
+                success: function(res){
+                    $('.imgLoader').hide();
+                    var resp	=   res.split('****');
+                    if(resp[1] == 'ERROR'){
+                        $('.registerBtn').prop('disabled',false);
+                    }else{
+                        if(resp[1] == 'FAILURE'){
+                            $('.btn btn-success').prop('disabled',false);
+                           showJsonErrors(resp[2]);
+                        }else if(resp[1] == 'SUCCESS'){
+                            document.forms['entryFrm'].submit();
+                        }
+                    }
+                },
+                error: function(xhr, textStatus, thrownError) {
+                    alert('Something went to wrong.Please Try again later...');
+                }
+            });
+        }
+    @endif
+    function showData(){
         @if($action == 'addRole')
             listingUrl                                                          =	baseUrl+'/master/roleListing';
-            listingUrl								+=	'?role_name='+$('#role_name_listing').val();
-        @endif
-        @if($action == 'addFeatures')
-            listingUrl                                                          =	baseUrl+'/master/roleWiseMenuList';
             listingUrl								+=	'?role_name='+$('#role_name_listing').val();
         @endif
         if(listingUrl != ''){
@@ -1297,11 +2216,38 @@ var listingUrl				=	'';
         });
     }
     @if(isset($id) && $id != '')
-        @if($action == 'addRegionalBranch')
+        @if($action == 'addRegionalBranchData')
             var id = {{$layoutArr['viewDataObj']->t_states_id }}
             getCityList(id);
         @endif
+        @if($action == 'addFeatures')
+            var id = {{$layoutArr['viewDataObj']->id }}
+            roleWiseMenuListUpdate(id);
+            $('#listingTable').show();
+        @endif
     @endif
+     function roleWiseMenuListUpdate(id){
+        $('#loddingImage').show();
+        $.ajaxSetup({
+            headers: {
+                    'X-CSRF-Token': csrfTkn
+            }
+        });
+        $.ajax({
+            url:baseUrl+'/master/roleWiseMenuListUpdate',
+            type: 'post',
+            cache: false,
+            //dataType: 'json',
+            data:{"id": id},
+            success: function(res) {
+                $('#listingTable').html(res);
+                $('#loddingImage').hide();
+            },
+            error: function(xhr, textStatus, thrownError) {
+                $('#loddingImage').hide();
+            }
+        });
+    }
     function printDiv(contElement){			
         var data	=	$('.'+contElement).html();
         var mywindow = window.open('', 'my div', 'height=400,width=800');

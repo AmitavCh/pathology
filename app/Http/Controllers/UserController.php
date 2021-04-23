@@ -134,6 +134,7 @@ class UserController extends Controller {
         }
         return view('users.add_user', ['layoutArr' => $layoutArr]);
     }
+    
     public function validateMasterUser() {
         $valiationArr = array();
         $formValArr = array();

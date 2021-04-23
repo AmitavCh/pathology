@@ -51,55 +51,110 @@ Route::post('master/saveRoleMenu','MasterController@saveRoleMenu')->name('saveRo
 // end user role
 // start Features
 Route::get('master/add_features','MasterController@addFeatures')->name('addFeatures');
+Route::get('master/add_features/{id}','MasterController@addFeatures')->name('addFeatures');
 Route::get('master/role_wise_menu_list','MasterController@roleWiseMenuList')->name('roleWiseMenuList');
-Route::post('master/saveFeatures','MasterController@saveFeatures')->name('saveFeatures');
+Route::post('master/roleWiseMenuListUpdate','MasterController@roleWiseMenuListUpdate')->name('roleWiseMenuListUpdate');
+Route::post('master/saveFeaturesData','MasterController@saveFeaturesData')->name('saveFeaturesData');
 // end Features
+//start Client Setup
+Route::get('master/add_organization_details','MasterController@addOrganizationDetails')->name('addOrganizationDetails');
+Route::get('master/add_organization_data','MasterController@addOrganizationData')->name('addOrganizationData');
+Route::post('master/saveOrganizationDetails','MasterController@saveOrganizationDetails')->name('saveOrganizationDetails');
+Route::post('master/validateOrganizationDetails','MasterController@validateOrganizationDetails')->name('validateOrganizationDetails');
+Route::get('master/add_organization_data/{id}','MasterController@addOrganizationData')->name('addOrganizationData');
+Route::post('master/organizationDetailsDeactive','MasterController@organizationDetailsDeactive')->name('organizationDetailsDeactive');
+Route::post('master/organizationDetailsActive','MasterController@organizationDetailsActive')->name('organizationDetailsActive');
+// end Client Setup
+//start Client user
+Route::get('master/add_master_user','MasterController@addMasterUser')->name('addMasterUser');
+Route::get('master/add_master_user_data','MasterController@addMasterUserData')->name('addMasterUserData');
+Route::post('master/saveMasterUserDetails','MasterController@saveMasterUserDetails')->name('saveMasterUserDetails');
+Route::post('master/validateMasterUserDetails','MasterController@validateMasterUserDetails')->name('validateMasterUserDetails');
+Route::post('master/validateMasterUserDetailss','MasterController@validateMasterUserDetailss')->name('validateMasterUserDetailss');
+Route::get('master/add_master_user_data/{id}','MasterController@addMasterUserData')->name('addMasterUserData');
+Route::post('master/masterUserDetailsDeactive','MasterController@masterUserDetailsDeactive')->name('masterUserDetailsDeactive');
+Route::post('master/masterUserDetailsActive','MasterController@masterUserDetailsActive')->name('masterUserDetailsActive');
+// end Client user
 //start master Setup
-Route::get('setting/add_organization_details','SettingController@addOrganizationDetails')->name('addOrganizationDetails');
-Route::post('setting/saveOrganizationDetails','SettingController@saveOrganizationDetails')->name('saveOrganizationDetails');
-Route::post('setting/validateOrganizationDetails','SettingController@validateOrganizationDetails')->name('validateOrganizationDetails');
-Route::get('setting/add_organization_details/{id}','SettingController@addOrganizationDetails')->name('addOrganizationDetails');
-Route::post('setting/organizationDetailsDeactive','SettingController@organizationDetailsDeactive')->name('organizationDetailsDeactive');
-Route::post('setting/organizationDetailsActive','SettingController@organizationDetailsActive')->name('organizationDetailsActive');
-
 Route::get('setting/add_department','SettingController@addDepartment')->name('addDepartment');
+Route::get('setting/add_department_data','SettingController@addDepartmentData')->name('addDepartmentData');
 Route::post('setting/saveDepartment','SettingController@saveDepartment')->name('saveDepartment');
-Route::get('setting/add_department/{id}','SettingController@addDepartment')->name('addDepartment');
+Route::get('setting/add_department_data/{id}','SettingController@addDepartmentData')->name('addDepartmentData');
 Route::post('setting/departmentDeactive','SettingController@departmentDeactive')->name('departmentDeactive');
 Route::post('setting/departmentActive','SettingController@departmentActive')->name('departmentActive');
 
 Route::get('setting/add_designation','SettingController@addDesignation')->name('addDesignation');
+Route::get('setting/add_designation_data','SettingController@addDesignationData')->name('addDesignationData');
 Route::post('setting/saveDesignation','SettingController@saveDesignation')->name('saveDesignation');
-Route::get('setting/add_designation/{id}','SettingController@addDesignation')->name('addDesignation');
+Route::get('setting/add_designation_data/{id}','SettingController@addDesignationData')->name('addDesignationData');
 Route::post('setting/designationDeactive','SettingController@designationDeactive')->name('designationDeactive');
 Route::post('setting/designationActive','SettingController@designationActive')->name('designationActive');
 
 Route::get('setting/add_state','SettingController@addState')->name('addState');
 Route::post('setting/saveState','SettingController@saveState')->name('saveState');
-Route::get('setting/add_state/{id}','SettingController@addState')->name('addState');
+Route::get('setting/add_state_data','SettingController@addStateData')->name('addStateData');
+Route::get('setting/add_state_data/{id}','SettingController@addStateData')->name('addStateData');
 Route::post('setting/stateDeactive','SettingController@stateDeactive')->name('stateDeactive');
 Route::post('setting/stateActive','SettingController@stateActive')->name('stateActive');
 
 Route::get('setting/add_city','SettingController@addCity')->name('addCity');
+Route::get('setting/add_city_data','SettingController@addCityData')->name('addCityData');
 Route::post('setting/saveCity','SettingController@saveCity')->name('saveCity');
-Route::get('setting/add_city/{id}','SettingController@addCity')->name('addCity');
+Route::get('setting/add_city_data/{id}','SettingController@addCityData')->name('addCityData');
 Route::post('setting/cityDeactive','SettingController@cityDeactive')->name('cityDeactive');
 Route::post('setting/cityActive','SettingController@cityActive')->name('cityActive');
 
 Route::post('setting/citylist','SettingController@citylist')->name('citylist');
 
-Route::get('setting/add_regional_branch','SettingController@addRegionalBranch')->name('addRegionalBranch');
-Route::post('setting/saveRegionalBranch','SettingController@saveRegionalBranch')->name('saveRegionalBranch');
-Route::post('setting/validateRegionalBranch','SettingController@validateRegionalBranch')->name('validateRegionalBranch');
-Route::get('setting/add_regional_branch/{id}','SettingController@addRegionalBranch')->name('addRegionalBranch');
-Route::post('setting/regionalBranchDeactive','SettingController@regionalBranchDeactive')->name('regionalBranchDeactive');
-Route::post('setting/regionalBranchActive','SettingController@regionalBranchActive')->name('regionalBranchActive');
+Route::get('setting/changepassword','SettingController@changepassword')->name('changepassword');
+Route::post('setting/updatePassword','SettingController@updatePassword')->name('updatePassword');
 
-Route::get('setting/add_business_logistics','SettingController@addBusinessLogistics')->name('addBusinessLogistics');
-Route::post('setting/saveBusinessLogistics','SettingController@saveBusinessLogistics')->name('saveBusinessLogistics');
-Route::post('setting/validateBusinessLogistics','SettingController@validateBusinessLogistics')->name('validateBusinessLogistics');
-Route::get('setting/add_business_logistics/{id}','SettingController@addBusinessLogistics')->name('addBusinessLogistics');
-Route::post('setting/businessBusinessDeactive','SettingController@businessBusinessDeactive')->name('businessBusinessDeactive');
-Route::post('setting/businessBusinessActive','SettingController@businessBusinessActive')->name('businessBusinessActive');
-
+Route::get('setting/userprofile','SettingController@userProfile')->name('userProfile');
+Route::post('setting/updateProfile','SettingController@updateProfile')->name('updateProfile');
 //end master Setup
+// start branch Setup
+Route::get('branch/add_regional_branch','BranchController@addRegionalBranch')->name('addRegionalBranch');
+Route::post('branch/saveRegionalBranch','BranchController@saveRegionalBranch')->name('saveRegionalBranch');
+Route::post('branch/validateRegionalBranch','BranchController@validateRegionalBranch')->name('validateRegionalBranch');
+Route::get('branch/add_regional_branch_data','BranchController@addRegionalBranchData')->name('addRegionalBranchData');
+Route::get('branch/add_regional_branch_data/{id}','BranchController@addRegionalBranchData')->name('addRegionalBranchData');
+Route::post('branch/regionalBranchDeactive','BranchController@regionalBranchDeactive')->name('regionalBranchDeactive');
+Route::post('branch/regionalBranchActive','BranchController@regionalBranchActive')->name('regionalBranchActive');
+
+Route::get('branch/add_business_logistics','SettingController@addBusinessLogistics')->name('addBusinessLogistics');
+Route::post('branch/saveBusinessLogistics','SettingController@saveBusinessLogistics')->name('saveBusinessLogistics');
+Route::post('branch/validateBusinessLogistics','SettingController@validateBusinessLogistics')->name('validateBusinessLogistics');
+Route::get('branch/add_business_logistics/{id}','SettingController@addBusinessLogistics')->name('addBusinessLogistics');
+Route::post('branch/businessBusinessDeactive','SettingController@businessBusinessDeactive')->name('businessBusinessDeactive');
+Route::post('branch/businessBusinessActive','SettingController@businessBusinessActive')->name('businessBusinessActive');
+
+Route::get('branch/create_organization_user','BranchController@createOrganizationUser')->name('createOrganizationUser');
+Route::get('branch/create_organization_user_data','BranchController@createOrganizationUserData')->name('createOrganizationUserData');
+Route::get('branch/create_organization_user_data/{id}','BranchController@createOrganizationUserData')->name('createOrganizationUserData');
+
+Route::get('branch/create_branch_user','BranchController@createBranchUser')->name('createBranchUser');
+Route::get('branch/create_branch_user_data','BranchController@createBranchUserData')->name('createBranchUserData');
+Route::post('branch/saveBranchUserDetails','BranchController@saveBranchUserDetails')->name('saveBranchUserDetails');
+Route::post('branch/validateBranchUserDetails','BranchController@validateBranchUserDetails')->name('validateBranchUserDetails');
+Route::post('branch/validateBranchUserDetailss','BranchController@validateBranchUserDetailss')->name('validateBranchUserDetailss');
+Route::get('branch/create_branch_user_data/{id}','BranchController@createBranchUserData')->name('createBranchUserData');
+Route::post('branch/branchUserDetailsDeactive','BranchController@branchUserDetailsDeactive')->name('branchUserDetailsDeactive');
+Route::post('branch/branchUserDetailsActive','BranchController@branchUserDetailsActive')->name('branchUserDetailsActive');
+
+Route::get('branch/add_lab_collection_center','BranchController@addLabCollectionCenter')->name('addLabCollectionCenter');
+Route::get('branch/add_lab_collection_center_data','BranchController@addLabCollectionCenterData')->name('addLabCollectionCenterData');
+Route::post('branch/saveLabCollectionCenter','BranchController@saveLabCollectionCenter')->name('saveLabCollectionCenter');
+Route::post('branch/validateLabCollectionCenter','BranchController@validateLabCollectionCenter')->name('validateLabCollectionCenter');
+Route::get('branch/add_lab_collection_center_data/{id}','BranchController@addLabCollectionCenterData')->name('addLabCollectionCenterData');
+Route::post('branch/labCollectionCenterDeactive','BranchController@labCollectionCenterDeactive')->name('labCollectionCenterDeactive');
+Route::post('branch/labCollectionCenterActive','BranchController@labCollectionCenterActive')->name('labCollectionCenterActive');
+
+Route::get('branch/add_lab_collection_center_user','BranchController@addLabCollectionCenterUser')->name('addLabCollectionCenterUser');
+Route::get('branch/add_lab_collection_center_user_data','BranchController@addLabCollectionCenterUserData')->name('addLabCollectionCenterUserData');
+Route::post('branch/saveLabCollectionCenterUserDetails','BranchController@saveLabCollectionCenterUserDetails')->name('saveLabCollectionCenterUserDetails');
+Route::post('branch/validateLabCollectionCenterUserDetails','BranchController@validateLabCollectionCenterUserDetails')->name('validateLabCollectionCenterUserDetails');
+Route::post('branch/validateLabCollectionCenterUserDetailss','BranchController@validateLabCollectionCenterUserDetailss')->name('validateLabCollectionCenterUserDetailss');
+Route::get('branch/add_lab_collection_center_user_data/{id}','BranchController@addLabCollectionCenterUserData')->name('addLabCollectionCenterUserData');
+Route::post('branch/labCollectionCenterUserDetailsDeactive','BranchController@labCollectionCenterUserDetailsDeactive')->name('labCollectionCenterUserDetailsDeactive');
+Route::post('branch/labCollectionCenterUserDetailsActive','BranchController@labCollectionCenterUserDetailsActive')->name('labCollectionCenterUserDetailsActive');
+//end branch Setup

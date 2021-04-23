@@ -20,7 +20,7 @@ Master | Menu Management
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="box box">
+            <div class="box box-success">
                 <div class="box-body">
                     <form method="post" id="entryFrm" name="entryFrm">
                         {{ csrf_field() }}

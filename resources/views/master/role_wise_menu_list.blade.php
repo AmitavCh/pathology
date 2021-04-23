@@ -15,9 +15,9 @@ use App\Http\Controllers\Controller;
             @foreach($menuVal as $subMenuKey=>$subMenuVal)
             <li style="list-style: none;">
                 @if(in_array($subMenuVal->id,$layoutArr['editSubMenuList']))
-                <input type="checkbox" name="subMenuIdArr[]" value="{{$subMenuVal->id}}" class="flat"/>
+                <input type="checkbox" name="subMenuIdArr[]" value="{{$subMenuVal->id}}" class="flat" checked="checked"/>
                 @else
-                <input type="checkbox" name="subMenuIdArr[]" value="{{$subMenuVal->id}}" class="flat" />
+                <input type="checkbox" name="subMenuIdArr[]" value="{{$subMenuVal->id}}" class="flat"/>
                 @endif                                                                                      
                 {{ $subMenuVal->sub_menu_name }}                                          
             </li>
@@ -27,7 +27,7 @@ use App\Http\Controllers\Controller;
     @else
     <li>
         @if(in_array($menuKey,$layoutArr['editMenuList']))
-        <input type="checkbox" name="menuIdArr[]" value="{{$menuKey }}" class="flat"/>
+        <input type="checkbox" name="menuIdArr[]" value="{{$menuKey }}" class="flat" checked="checked"/>
         @else
         <input type="checkbox" name="menuIdArr[]" value="{{$menuKey }}" class="flat" />
         @endif                                                                  

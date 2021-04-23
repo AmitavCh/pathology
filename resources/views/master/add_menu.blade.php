@@ -52,7 +52,7 @@ Master | Create Menu
                                     <td>{{$resVal->menu_order}}</td>
                                     <td>{{$resVal->menu_icon}}</td>
                                     <td class="text-center">							
-                                        <a class="iframeD btn-sm" href="{{ URL::to('master/add_menu_data/'.base64_encode(base64_encode($resVal->id))) }}">
+                                        <a class="iframeD btn-sm" title="Edit Record" href="{{ URL::to('master/add_menu_data/'.base64_encode(base64_encode($resVal->id))) }}">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                         @if($resVal->is_active == 1)

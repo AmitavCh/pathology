@@ -51,7 +51,7 @@ Master | Create Menu
                                     <td><?php echo e($resVal->menu_order); ?></td>
                                     <td><?php echo e($resVal->menu_icon); ?></td>
                                     <td class="text-center">							
-                                        <a class="iframeD btn-sm" href="<?php echo e(URL::to('master/add_menu_data/'.base64_encode(base64_encode($resVal->id)))); ?>">
+                                        <a class="iframeD btn-sm" title="Edit Record" href="<?php echo e(URL::to('master/add_menu_data/'.base64_encode(base64_encode($resVal->id)))); ?>">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                         <?php if($resVal->is_active == 1): ?>
